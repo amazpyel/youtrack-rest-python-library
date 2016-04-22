@@ -238,6 +238,24 @@ class Comment(YouTrackObject):
         return self.youtrack.getUser(self.author)
 
 
+class WorkItem(YouTrackObject):
+    def __init__(self, xml=None, youtrack=None):
+        self.workitem_date = 0
+        self.workitem_duration = 0
+        self.description = ''
+        self.author = ''
+        YouTrackObject.__init__(self, xml, youtrack)
+
+    def _update(self, xml):
+        if xml is None:
+            return
+        if isinstance(xml, Document):
+            xml = xml.documentElement
+        self.workitem_date = int(self._text(xml.getElementsByTagName('date')[0]))
+        self.workitem_duration = int(self._text(xml.getElementsByTagName('duration')[0]))
+        self.description = self._text(xml.getElementsByTagName('description')[0])
+        self.author = xml.getElementsByTagName('author')[0].getAttribute('login')
+
 class IssueChange(YouTrackObject):
     def __init__(self, xml=None, youtrack=None):
         self.fields = []
