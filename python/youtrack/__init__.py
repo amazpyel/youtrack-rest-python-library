@@ -253,7 +253,10 @@ class WorkItem(YouTrackObject):
             xml = xml.documentElement
         self.workitem_date = int(self._text(xml.getElementsByTagName('date')[0]))
         self.workitem_duration = int(self._text(xml.getElementsByTagName('duration')[0]))
-        self.description = self._text(xml.getElementsByTagName('description')[0])
+        try:
+            self.description = self._text(xml.getElementsByTagName('description')[0])
+        except IndexError:
+            pass
         self.author = xml.getElementsByTagName('author')[0].getAttribute('login')
 
 class IssueChange(YouTrackObject):
