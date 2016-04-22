@@ -147,6 +147,10 @@ class Connection(object):
         response, content = self._req('GET', '/issue/' + id + '/comment')
         xml = minidom.parseString(content)
         return [youtrack.Comment(e, self) for e in xml.documentElement.childNodes if e.nodeType == Node.ELEMENT_NODE]
+    
+    def getTracking(self, id):
+        return [youtrack.WorkItem(workitem, self) for workitem in
+                self._get("/issue/%s/timetracking/workitem/" % id).getElementsByTagName('workItem')]
 
     def getAttachments(self, id):
         response, content = self._req('GET', '/issue/' + id + '/attachment')
